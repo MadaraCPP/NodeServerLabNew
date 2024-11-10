@@ -2,6 +2,7 @@
 const Product = require('../models/Product'); 
 const Category = require('../models/Category'); 
 
+
 // Получение всех продуктов
 exports.getProducts = async (req, res) => {
   try {
@@ -26,19 +27,18 @@ exports.getProductsByCategory = async (req, res) => {
 
 // Добавление нового продукта
 exports.addProduct = async (req, res) => {
-  const { name, price, categoryId } = req.body;
+  const { name, price, categoryId } = req.body; // Добавили categoryId
   try {
+    // Проверка существования категории
+    const category = await Category.findByPk(categoryId);
+    if (!Category) {
+      return res.status(400).json({ error: 'Category not found' });
+    }
+
+    // Создание продукта с привязкой к категории
     const product = await Product.create({ name, price, categoryId });
     res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-
-// // Экспортируем функции
-// module.exports = {
-//   getProducts, // Экспортируем getProducts
-//   addProduct, // Экспортируем addProduct
-//   getProductsByCategory,
-// };

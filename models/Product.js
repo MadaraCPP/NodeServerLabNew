@@ -24,14 +24,15 @@ Product.init({
       model: Category,
       key: 'id',
     },
+    field: 'categoryId'  // Явное указание имени столбца
   },
 }, {
   sequelize,
   modelName: 'Product',
 });
 
-// Связь один-ко-многим
-Category.hasMany(Product);
-Product.belongsTo(Category);
+// Объявляем связь
+Category.hasMany(Product, { foreignKey: 'categoryId' });
+Product.belongsTo(Category, { foreignKey: 'categoryId' });
 
 module.exports = Product;
