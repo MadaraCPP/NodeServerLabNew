@@ -1,6 +1,7 @@
 const sequelize = require('./database');
 const Product = require('./models/Product');
 const Category = require('./models/Category');
+const User = require('./models/User'); // Добавляем модель User
 
 const init = async () => {
   await sequelize.sync({ force: true }); // Необходимо для создания таблиц
@@ -21,6 +22,13 @@ const init = async () => {
   await Product.create({ name: 'Мыло', price: 25, categoryId: householdCategory.id });
   await Product.create({ name: 'Стиральный порошок', price: 150, categoryId: householdCategory.id });
   await Product.create({ name: 'Бальзам для стирки', price: 176, categoryId: householdCategory.id });
+
+  // Создание тестового пользователя
+  await User.create({
+    email: 'test@example.com',
+    password: '12345',
+    isActive: false, // По умолчанию пользователь не активирован
+  });
 
   console.log('Database initialized');
 };

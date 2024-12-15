@@ -7,7 +7,7 @@ const productController = require('./controllers/ProductController');
 const categoryController = require('./controllers/CategoryController');
 const uploadController = require('./controllers/UploadController');
 const path = require('path');
-
+const authController = require('./controllers/authController'); // Контроллер для авторизации
 
 // Middleware для обработки JSON в теле запроса
 app.use(express.json());
@@ -28,12 +28,17 @@ app.post('/api/upload', uploadController.uploadFile);
 // Раздача статических файлов из папки uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Маршрут для регистрации
+app.post('/api/register', authController.register);
+
+// Маршрут для активации
+app.get('/api/activate/:token', authController.activateAccount);
 
 // Запуск сервера
 app.listen(port, async () => {
   try {
     await sequelize.authenticate(); // Проверка соединения
-    await sequelize.sync( ); // Синхронизация таблиц
+    await sequelize.sync(); // Синхронизация таблиц
     console.log('Database synced successfully');
     console.log(`Server is running on http://localhost:${port}`);
   } catch (error) {
